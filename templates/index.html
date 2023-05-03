@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Manolis Georgioudakis">
+    <title>Dynamic Analysis of Multi-Story Shear Buildings using ML</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container">
+        <main>
+            <div class="py-5 text-center">
+                <!-- <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
+                <h2>Dynamic Response of Multi-Story Shear Buildings Using ML <sup style="color:#900000; font-size: 1.1rem;">WebApp</sup></h2>
+                <p class="lead text-muted">Prediction of the fundamental period, the top displacement and the base shear</p>
+            </div>
+
+            <div class="row g-5">
+                <div class="col-md-12 col-lg-8">
+                    <form name="form" method="POST">
+                        <div class="row">
+                            <div class="col-md-4">
+								<h4 class="d-flex justify-content-between align-items-center">
+									<span class="text-primary">Input Parameters</span>
+								</h4>
+                                <div class="col-md-12 pt-3">
+                                    <label class="form-label">Number of stories</label>
+                                    <input type="number" class="form-control" name="noFloors" min="2" max="20" step="1" required>
+                                </div>
+                                <div class="col-md-12 pt-3">
+                                    <label class="form-label">Mass of each story [tn]</label>
+                                    <input type="number" class="form-control" name="mass" required>
+                                </div>
+                                <div class="col-md-12 pt-3">
+                                    <label class="form-label">Stiffness of each story [kN/m]</label>
+                                    <input type="number" class="form-control" name="stiffness" required>
+                                </div>
+                                <div class="col-md-12 pt-3">
+                                    <label class="form-label">Ground Type</label>
+                                    <select class="form-select" name="soil_type" id="soil_type">
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 pt-3">
+                                    <label class="form-label">ag [g]</label>
+                                    <input type="number" step="0.01" class="form-control" name="ag" required>
+                                </div>
+                                <div class="col-12 pt-4 pb-5">
+                                    <button class="btn btn-primary w-100" type="submit">Predict</button>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <img class="d-block mx-auto mb-4" src="static/shear_building_model.png" alt="" width="85%">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <h4 class="mb-3">Output</h4>
+                    <div class="col-md-12">
+                        <table class="table table-bordered" width="100%">
+                            <tbody>
+                                <tr>
+                                    <th colspan="2" style="background-color: #dae1eb;">User Definitions</th>
+                                </tr>
+                                <tr>
+                                    <td width="60%">Number of Stories</td>
+                                    <td>{{ request.form['noFloors'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Mass (m)</td>
+                                    <td>{{ output.mass }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Stiffness (k)</td>
+                                    <td>{{ output.stiffness }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Soil Type</td>
+                                    <td>{{ request.form['soil_type'] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </br>
+                        <table class="table table-bordered" width="100%">
+                            <tbody>
+                                <tr>
+                                    <th colspan="2" style="background-color: #dae1eb;">Results</th>
+                                </tr>
+                                <tr>
+                                    <td>Fundamental Period (T<sub>1</sub>)</td>
+                                    <td>{{ output.t1 }}</td>
+                                </tr>
+                                <tr>
+                                    <td width="60%">Roof Top Displacement (U<sub>top</sub>)</td>
+                                    <td>{{ output.utop }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Base Shear (V<sub>b</sub>)</td>
+                                    <td>{{ output.vb }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </br>
+                        <p class="text-muted">with the assumption that k and m are constant along building height.</br>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="pt-5 my-5 text-muted border-top">
+            Created by MG &middot; &copy; 2023
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
